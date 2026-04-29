@@ -7,6 +7,7 @@ import ParserForm from "../ParserForm/index.jsx";
 import { evaluate } from "../../utils/evaluate.js";
 import styles from "./Parser.module.css";
 
+// Pre-compile the grammar once
 const compiledGrammar = nearley.Grammar.fromCompiled(grammar);
 
 const Parser = () => {
@@ -15,6 +16,7 @@ const Parser = () => {
   const [parsedNode, setParsedNode] = useState(null);
   const [error, setError] = useState(null);
 
+  // Clear all states to reset the parser
   const clearParse = () => {
     setEquation("");
     setParsedNode(null);
@@ -22,6 +24,7 @@ const Parser = () => {
     setError(null);
   };
 
+  // Handle the parsing of the equation
   const handleParse = () => {
     if (!equation.trim()) {
       clearParse();
@@ -29,20 +32,25 @@ const Parser = () => {
     }
 
     try {
+      // Create a new parser instance for each parse to avoid state issues
       const parser = new nearley.Parser(compiledGrammar);
       const source = equation.replaceAll(/\s+/g, "");
+      // Feed the source to the parser
       parser.feed(source);
       const results = parser.results;
 
+      // Check if there are any results from the parser
       if (results.length === 0) {
         throw new Error("No results.");
       }
 
+      // Evaluate the first result and update states
       const node = results[0];
       setParsedNode(node);
       setResult(evaluate(node));
       setError(null);
     } catch (e) {
+      // Extract the error message and update states
       setError(e.message.split(" Instead")[0]);
       setParsedNode(null);
       setResult(null);

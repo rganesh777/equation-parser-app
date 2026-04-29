@@ -7,7 +7,7 @@ export function evaluate(node) {
     case "Group":
       return evaluate(node.expr);
 
-    case "BinaryExpr":
+    case "BinaryExpr": {
       const left = evaluate(node.left);
       const right = evaluate(node.right);
 
@@ -27,6 +27,7 @@ export function evaluate(node) {
         default:
           throw new Error(`Unknown operator: ${node.op}`);
       }
+    }
 
     default:
       throw new Error(`Unknown node type: ${node.type}`);
