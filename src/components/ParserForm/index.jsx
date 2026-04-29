@@ -1,6 +1,14 @@
 import styles from "./ParserForm.module.css";
 
 const ParserForm = ({ equation, setEquation, handleParse, clearParse }) => {
+  const handleOnChange = (e) => {
+    if (e.target.value === "") {
+      clearParse();
+    } else {
+      setEquation(e.target.value);
+    }
+  };
+
   return (
     <div className="parser-form">
       <label htmlFor="equation" className={styles.label}>
@@ -13,7 +21,7 @@ const ParserForm = ({ equation, setEquation, handleParse, clearParse }) => {
         value={equation}
         data-testid="equation-input"
         placeholder="e.g. 2 * (3 + 4) = 14"
-        onChange={(e) => setEquation(e.target.value)}
+        onChange={handleOnChange}
         className={styles.input}
       />
 
